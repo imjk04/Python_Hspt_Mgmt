@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MediCare · Hospital Management</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <!-- Google Font: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <div class="logo">
+                <i class="fas fa-heartbeat" style="color: #0b7b6b; margin-right: 10px;"></i>
+                <span>MediCare<span style="font-weight:300; color:#5a6b7a;">·HM</span></span>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#dashboard" class="active"><i class="fas fa-th-large"></i> Dashboard</a></li>
+                <li><a href="#patients"><i class="fas fa-user-injured"></i> Patients</a></li>
+                <li><a href="#doctors"><i class="fas fa-user-md"></i> Doctors</a></li>
+                <li><a href="#appointments"><i class="fas fa-calendar-check"></i> Appointments</a></li>
+                <li><a href="#reports"><i class="fas fa-file-medical-alt"></i> Reports</a></li>
+            </ul>
+            <div class="nav-profile">
+                <i class="fas fa-user-circle"></i>
+                <span>Admin</span>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Dashboard stats -->
+            <section id="dashboard" class="section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background:#e0f2fe; color:#0b7b6b;"><i class="fas fa-users"></i></div>
+                        <div>
+                            <h3>Total Patients</h3>
+                            <p class="stat-number" id="totalPatients">1,284</p>
+                            <span class="stat-trend up"><i class="fas fa-arrow-up"></i> 12%</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background:#e6f7e6; color:#2b7a4b;"><i class="fas fa-user-md"></i></div>
+                        <div>
+                            <h3>Doctors</h3>
+                            <p class="stat-number">48</p>
+                            <span class="stat-trend up"><i class="fas fa-arrow-up"></i> 4%</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background:#fef3e2; color:#b45a1c;"><i class="fas fa-calendar-day"></i></div>
+                        <div>
+                            <h3>Today's Appointments</h3>
+                            <p class="stat-number">23</p>
+                            <span class="stat-trend down"><i class="fas fa-arrow-down"></i> 2%</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background:#fce4e4; color:#b33c3c;"><i class="fas fa-hospital"></i></div>
+                        <div>
+                            <h3>Available Beds</h3>
+                            <p class="stat-number">142</p>
+                            <span class="stat-trend up"><i class="fas fa-arrow-up"></i> 8%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick actions & search -->
+                <div class="action-row">
+                    <div class="quick-actions">
+                        <button class="btn primary" id="newPatientBtn"><i class="fas fa-plus-circle"></i> New Patient</button>
+                        <button class="btn secondary"><i class="fas fa-calendar-plus"></i> Schedule</button>
+                        <button class="btn outline"><i class="fas fa-print"></i> Reports</button>
+                    </div>
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search patients, doctors..." id="globalSearch" />
+                    </div>
+                </div>
+
+                <!-- Recent patients table -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-clock"></i> Recent Patients</h3>
+                        <a href="#" class="view-all">View all <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Patient</th>
+                                    <th>ID</th>
+                                    <th>Doctor</th>
+                                    <th>Status</th>
+                                    <th>Last Visit</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="patientTableBody">
+                                <!-- dynamic rows from JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- placeholder sections for nav -->
+            <section id="patients" class="section" style="display:none;"><h2>Patients Management</h2><p class="text-muted">Full patient list, add/edit, and records.</p></section>
+            <section id="doctors" class="section" style="display:none;"><h2>Doctors Directory</h2><p class="text-muted">Manage doctors, schedules, and departments.</p></section>
+            <section id="appointments" class="section" style="display:none;"><h2>Appointments Calendar</h2><p class="text-muted">View and manage all appointments.</p></section>
+            <section id="reports" class="section" style="display:none;"><h2>Reports & Analytics</h2><p class="text-muted">Generate and view hospital statistics.</p></section>
+        </div>
+    </main>
+
+    <!-- Modal New Patient -->
+    <div class="modal" id="patientModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-plus"></i> Register New Patient</h3>
+                <span class="close-modal" id="closeModalBtn">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="patientForm">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="patientName" placeholder="e.g. Jane Doe" required />
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Date of Birth</label>
+                            <input type="date" id="patientDob" required />
+                        </div>
+                        <div class="form-group">
+                            <label>Gender</label>
+                            <select id="patientGender">
+                                <option>Female</option><option>Male</option><option>Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Contact</label>
+                        <input type="tel" id="patientContact" placeholder="Phone number" />
+                    </div>
+                    <div class="form-group">
+                        <label>Reason for visit</label>
+                        <textarea id="patientReason" rows="2" placeholder="Symptoms / notes..."></textarea>
+                    </div>
+                    <button type="submit" class="btn primary full-width"><i class="fas fa-save"></i> Register Patient</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer"><div class="container"><p>&copy; 2026 MediCare Hospital Management · all rights reserved</p></div></footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
